@@ -1,19 +1,45 @@
-import userSearchDraw from './userSearch';
+import { SORT_BTNS, TABLE_HEADERS } from '../utils/constants';
 
-const userTableDraw = () => {
-  const wrapper = document.createElement('div');
-  wrapper.classList.add('wrapper');
+const tableDraw = () => {
+  const tableWrapper = document.createElement('div');
+  tableWrapper.classList.add('table-container');
 
-  const header = document.createElement('h1');
-  header.classList.add('header');
-  header.innerHTML = 'Список пользователей';
+  const sortButtons = document.createElement('div');
+  sortButtons.classList.add('sort-btns-container');
 
-  wrapper.appendChild(header);
+  const headerBtns = document.createElement('span');
+  headerBtns.innerText = 'Сортировка: ';
+  sortButtons.appendChild(headerBtns);
 
-  const search = userSearchDraw();
-  wrapper.appendChild(search);
+  SORT_BTNS.forEach((item) => {
+    const button = document.createElement('button');
+    button.classList.add('sort-btn');
+    button.classList.add(item.class);
+    button.innerText = item.text;
 
-  return wrapper;
+    sortButtons.appendChild(button);
+  });
+
+  tableWrapper.appendChild(sortButtons);
+
+  const table = document.createElement('table');
+  table.classList.add('table');
+
+  const tableHeader = document.createElement('tr');
+  tableHeader.classList.add('table-header');
+
+  TABLE_HEADERS.forEach((header) => {
+    const th = document.createElement('th');
+    th.innerText = header;
+
+    tableHeader.appendChild(th);
+  });
+
+  table.appendChild(tableHeader);
+
+  tableWrapper.appendChild(table);
+
+  return tableWrapper;
 };
 
-export default userTableDraw;
+export default tableDraw;

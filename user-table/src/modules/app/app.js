@@ -1,4 +1,4 @@
-import userTableDraw from '../components/userTable';
+import userTableDraw from '../components/userTableComponent';
 
 export const app = () => {
   const root = document.querySelector('.root');
