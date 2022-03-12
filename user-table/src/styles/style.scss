@@ -61,6 +61,7 @@ $username: #0cb4f1;
 $font: #acacac;
 $namesTablet: #9eaab4;
 $gray: #e5e5e5;
+$shadow: #949494;
 
 .wrapper {
   background-color: $gray;
@@ -75,4 +76,84 @@ $gray: #e5e5e5;
   font-size: 24px;
   line-height: 28px;
   color: $black;
+}
+
+.search-wrapper {
+  width: 961px;
+  height: 102px;
+  background: $white;
+  box-shadow: 0px 18px 15px rgba($shadow, 0.15);
+  border-radius: 7px;
+  margin-top: 20px;
+  padding: 12px 44px 16px 16px;
+}
+
+.search-label {
+  position: relative;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    height: 24px;
+    background: url('../assets/svg/search.svg') center / contain no-repeat;
+  }
+}
+
+.search-input {
+  width: 901px;
+  height: 34px;
+  background: #eceff0;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: $black;
+  padding-left: 31px;
+  &::-webkit-input-placeholder {
+    color: $namesTablet;
+  }
+  &::-moz-placeholder {
+    color: $namesTablet;
+    opacity: 1;
+  }
+  &:-ms-input-placeholder {
+    color: $namesTablet;
+  }
+  &::-ms-input-placeholder {
+    color: $namesTablet;
+  }
+  &::placeholder {
+    color: $namesTablet;
+  }
+}
+
+.clear-button {
+  position: relative;
+  width: 130px;
+  height: 20px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #4f4f4f;
+  background-color: $white;
+  padding-left: 10px;
+  margin-top: 22px;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    background: url('../assets/svg/clean.svg') center / contain no-repeat;
+  }
+  &:hover {
+    border-radius: 3px;
+    box-shadow: 0px 3px 3px rgba($shadow, 0.15);
+  }
 }
