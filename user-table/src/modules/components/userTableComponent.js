@@ -1,7 +1,16 @@
-import tableDraw from './userTable';
+import { tableDraw } from './userTable';
 import userSearchDraw from './userSearch';
 
-const userTableDraw = () => {
+export const getUsers = async () => {
+  const url = 'https://5ebbb8e5f2cfeb001697d05c.mockapi.io/users';
+
+  const responce = await fetch(url);
+  const data = await responce.json();
+
+  return data;
+};
+
+export const userTableDraw = () => {
   const wrapper = document.createElement('div');
   wrapper.classList.add('wrapper');
 
@@ -14,10 +23,8 @@ const userTableDraw = () => {
   const search = userSearchDraw();
   wrapper.appendChild(search);
 
-  const tableW = tableDraw();
-  wrapper.appendChild(tableW);
+  const table = tableDraw();
+  wrapper.appendChild(table);
 
   return wrapper;
 };
-
-export default userTableDraw;

@@ -1,6 +1,6 @@
 import { SORT_BTNS, TABLE_HEADERS } from '../utils/constants';
 
-const tableDraw = () => {
+export const tableDraw = () => {
   const tableWrapper = document.createElement('div');
   tableWrapper.classList.add('table-container');
 
@@ -42,4 +42,43 @@ const tableDraw = () => {
   return tableWrapper;
 };
 
-export default tableDraw;
+const createUser = (user, tableRow) => {
+  const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+
+  const name = document.createElement('td');
+  name.innerText = user.username;
+  tableRow.appendChild(name);
+
+  const email = document.createElement('td');
+  email.innerText = user.email;
+  tableRow.appendChild(email);
+
+  const regData = document.createElement('td');
+  const date = new Date(user.registration_date);
+  regData.innerText = date.toLocaleDateString('ru', options);
+  tableRow.appendChild(regData);
+
+  const rating = document.createElement('td');
+  rating.innerText = user.rating;
+  tableRow.appendChild(rating);
+
+  const button = document.createElement('button');
+  button.classList.add('delete-user-btn');
+  button.dataset.id = user.id;
+  tableRow.appendChild(button);
+};
+
+export const createTable = (users) => {
+  const table = document.querySelector('.table');
+
+  const max = users.length < 5 ? users.length : 5;
+
+  for (let i = 0; i < max; i += 1) {
+    const tableRow = document.createElement('tr');
+    tableRow.classList.add('user-data');
+
+    createUser(users[i], tableRow);
+
+    table.appendChild(tableRow);
+  }
+};
