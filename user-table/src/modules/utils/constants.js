@@ -1,6 +1,6 @@
 export const SORT_BTNS = [
   {
-    class: 'data',
+    class: 'date',
     text: 'Дата регистрации',
   },
   {

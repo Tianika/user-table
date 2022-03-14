@@ -4,15 +4,20 @@ import { userTableDraw, getUsers } from '../components/userTableComponent';
 export const app = async () => {
   const root = document.querySelector('.root');
 
+  // создаем страницу
   const table = userTableDraw();
   root.appendChild(table);
 
+  // добавляем пользователей в таблицу
   const users = await getUsers();
   createTable(users);
 
   const search = document.querySelector('.search-input');
   const clearBtn = document.querySelector('.clear-button');
+  const sortingByDate = document.querySelector('.sort-btn.date');
+  const sortingByRank = document.querySelector('.sort-btn.rank');
 
+  // поиск по имени или email
   search.addEventListener('input', () => {
     const value = search.value.toLowerCase();
 
@@ -33,12 +38,60 @@ export const app = async () => {
     createTable(filterUsers);
   });
 
+  const sortingTypes = {
+    date: '',
+    rank: '',
+  };
+
+  // кнопка очистить
   clearBtn.addEventListener('click', () => {
     clearBtn.classList.add('hide');
+    sortingByDate.classList.remove('active');
+    sortingByRank.classList.remove('active');
     search.value = '';
+    sortingTypes.date = '';
+    sortingTypes.rank = '';
 
     clearTable();
     createTable(users);
+  });
+
+  // сортировка по дате
+  sortingByDate.addEventListener('click', () => {
+    sortingByDate.classList.add('active');
+    sortingByRank.classList.remove('active');
+    clearBtn.classList.remove('hide');
+
+    sortingTypes.date = sortingTypes.date === 'desc' ? 'asc' : 'desc';
+
+    const sortUsersByDate = [...users].sort((user1, user2) => {
+      const date1 = new Date(user1.registration_date);
+      const date2 = new Date(user2.registration_date);
+
+      return sortingTypes.date === 'desc' ? date2 - date1 : date1 - date2;
+    });
+
+    clearTable();
+    createTable(sortUsersByDate);
+  });
+
+  // сортировка по рейтингу
+  sortingByRank.addEventListener('click', () => {
+    sortingByDate.classList.remove('active');
+    sortingByRank.classList.add('active');
+    clearBtn.classList.remove('hide');
+
+    sortingTypes.rank = sortingTypes.rank === 'desc' ? 'asc' : 'desc';
+
+    const sortUsersByRank = [...users].sort((user1, user2) => {
+      const rank1 = user1.rating;
+      const rank2 = user2.rating;
+
+      return sortingTypes.rank === 'desc' ? rank2 - rank1 : rank1 - rank2;
+    });
+
+    clearTable();
+    createTable(sortUsersByRank);
   });
 };
 
