@@ -161,7 +161,6 @@ $shadow: #949494;
 
 .table-container {
   width: 961px;
-  height: 102px;
   margin-top: 72px;
 }
 
@@ -233,4 +232,36 @@ $shadow: #949494;
   width: 16px;
   height: 16px;
   background: url('../assets/svg/cancel.svg') center / contain no-repeat;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 961px;
+}
+
+.pagination {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  color: $font;
+  cursor: default;
+
+  &.active {
+    color: $black;
+    cursor: pointer;
+  }
+}
+
+.count-pages,
+.current-page {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  margin: 10px;
+}
+
+.separator {
+  color: $font;
 }

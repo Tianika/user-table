@@ -1,5 +1,11 @@
-import { clearTable, createTable } from '../components/userTable';
+import {
+  addPagination,
+  checkCurrentPage,
+  clearTable,
+  createTable,
+} from '../components/userTable';
 import { userTableDraw, getUsers } from '../components/userTableComponent';
+import { USER_PER_PAGE } from '../utils/constants';
 
 export const app = async () => {
   const root = document.querySelector('.root');
@@ -10,12 +16,26 @@ export const app = async () => {
 
   // добавляем пользователей в таблицу
   const users = await getUsers();
-  createTable(users);
+
+  const pagesState = {
+    current: 1,
+    all: Math.ceil(users.length / USER_PER_PAGE),
+  };
+
+  createTable(users.slice(pagesState.current - 1, USER_PER_PAGE));
+
+  // добавляем пагинацию
+  const pagination = addPagination(users);
+  root.querySelector('.wrapper').appendChild(pagination);
+
+  checkCurrentPage(pagesState.current, pagesState.all);
 
   const search = document.querySelector('.search-input');
   const clearBtn = document.querySelector('.clear-button');
   const sortingByDate = document.querySelector('.sort-btn.date');
   const sortingByRank = document.querySelector('.sort-btn.rank');
+  const paginationLeft = document.querySelector('.pagination.left');
+  const paginationRight = document.querySelector('.pagination.right');
 
   // поиск по имени или email
   search.addEventListener('input', () => {
@@ -92,6 +112,24 @@ export const app = async () => {
 
     clearTable();
     createTable(sortUsersByRank);
+  });
+
+  // пагинация влево
+  paginationLeft.addEventListener('click', () => {
+    if (pagesState.current > 1) {
+      pagesState.current -= 1;
+
+      checkCurrentPage(pagesState.current, pagesState.all);
+    }
+  });
+
+  // пагинация вправо
+  paginationRight.addEventListener('click', () => {
+    if (pagesState.current < pagesState.all) {
+      pagesState.current += 1;
+
+      checkCurrentPage(pagesState.current, pagesState.all);
+    }
   });
 };
 

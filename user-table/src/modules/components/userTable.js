@@ -1,4 +1,4 @@
-import { SORT_BTNS, TABLE_HEADERS } from '../utils/constants';
+import { SORT_BTNS, TABLE_HEADERS, USER_PER_PAGE } from '../utils/constants';
 
 export const tableDraw = () => {
   const tableWrapper = document.createElement('div');
@@ -68,10 +68,48 @@ const createUser = (user, tableRow) => {
   tableRow.appendChild(button);
 };
 
+export const addPagination = (users) => {
+  const fragment = document.createDocumentFragment();
+
+  const left = document.createElement('button');
+  left.classList.add('pagination');
+  left.classList.add('left');
+  left.innerText = '<';
+
+  const right = document.createElement('button');
+  right.classList.add('pagination');
+  right.classList.add('right');
+  right.innerText = '>';
+
+  const currentPage = document.createElement('span');
+  currentPage.classList.add('current-page');
+  currentPage.innerText = 1;
+
+  const separator = document.createElement('span');
+  separator.classList.add('separator');
+  separator.innerText = '/';
+
+  const countPages = document.createElement('span');
+  countPages.classList.add('count-pages');
+  countPages.innerText = Math.ceil(users.length / USER_PER_PAGE);
+
+  fragment.appendChild(left);
+  fragment.appendChild(currentPage);
+  fragment.appendChild(separator);
+  fragment.appendChild(countPages);
+  fragment.appendChild(right);
+
+  const container = document.createElement('div');
+  container.classList.add('pagination-container');
+  container.appendChild(fragment);
+
+  return container;
+};
+
 export const createTable = (users) => {
   const table = document.querySelector('.table');
 
-  const max = users.length < 5 ? users.length : 5;
+  const max = users.length < USER_PER_PAGE ? users.length : USER_PER_PAGE;
 
   for (let i = 0; i < max; i += 1) {
     const tableRow = document.createElement('tr');
@@ -90,4 +128,27 @@ export const clearTable = () => {
   users.forEach((user) => {
     table.removeChild(user);
   });
+};
+
+export const checkCurrentPage = (current, all) => {
+  const paginationLeft = document.querySelector('.pagination.left');
+  const paginationRight = document.querySelector('.pagination.right');
+  const currentPage = document.querySelector('.current-page');
+  const countPages = document.querySelector('.count-pages');
+
+  if (current < all) {
+    paginationRight.classList.add('active');
+  }
+  if (current === all) {
+    paginationRight.classList.remove('active');
+  }
+  if (current === 1) {
+    paginationLeft.classList.remove('active');
+  }
+  if (current > 1) {
+    paginationLeft.classList.add('active');
+  }
+
+  currentPage.innerText = current;
+  countPages.innerText = all;
 };

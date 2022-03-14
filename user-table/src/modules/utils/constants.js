@@ -15,3 +15,5 @@ export const TABLE_HEADERS = [
   'Дата регистрации',
   'Рейтинг',
 ];
+
+export const USER_PER_PAGE = 5;
