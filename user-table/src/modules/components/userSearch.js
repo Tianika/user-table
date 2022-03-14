@@ -15,6 +15,7 @@ const userSearchDraw = () => {
 
   const clearBtn = document.createElement('button');
   clearBtn.classList.add('clear-button');
+  clearBtn.classList.add('hide');
   clearBtn.innerText = 'Очистить фильтр';
 
   searchWrapper.appendChild(label);

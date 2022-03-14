@@ -82,3 +82,12 @@ export const createTable = (users) => {
     table.appendChild(tableRow);
   }
 };
+
+export const clearTable = () => {
+  const table = document.querySelector('.table');
+  const users = table.querySelectorAll('.user-data');
+
+  users.forEach((user) => {
+    table.removeChild(user);
+  });
+};

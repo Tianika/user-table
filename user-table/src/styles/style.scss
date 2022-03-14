@@ -6,9 +6,6 @@
   margin: 0;
   border: 0;
   box-sizing: border-box;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
 }
 
 a {
@@ -156,6 +153,9 @@ $shadow: #949494;
   &:hover {
     border-radius: 3px;
     box-shadow: 0px 3px 3px rgba($shadow, 0.15);
+  }
+  &.hide {
+    display: none;
   }
 }
 
