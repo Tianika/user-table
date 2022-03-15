@@ -265,3 +265,59 @@ $shadow: #949494;
 .separator {
   color: $font;
 }
+
+.delete-user-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($font, 0.65);
+}
+
+.delete-user-window {
+  position: absolute;
+  top: 300px;
+  left: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 353px;
+  height: 134px;
+  background: $white;
+  border-radius: 8px;
+  padding: 36px 0 32px;
+}
+
+.delete-question {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  margin-bottom: 24px;
+}
+
+.modal-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 219px;
+  height: 27px;
+}
+
+.confirmation-button,
+.cancel-button {
+  text-align: center;
+  width: 95px;
+  height: 27px;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #828282;
+  background: #e0e0e0;
+
+  &:hover {
+    color: $white;
+    background: #0cb4f1;
+  }
+}

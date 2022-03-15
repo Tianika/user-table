@@ -1,3 +1,4 @@
+import modalWindowDraw from '../components/modal';
 import { addPagination, changeTable } from '../components/userTable';
 import { userTableDraw, getUsers } from '../components/userTableComponent';
 import { USER_PER_PAGE } from '../utils/constants';
@@ -17,6 +18,7 @@ export const app = async () => {
     all: Math.ceil(users.length / USER_PER_PAGE),
   };
 
+  let sortedUsersList = [...users];
   let currentStateUsers = [...users];
 
   const pagination = addPagination(users);
@@ -35,7 +37,7 @@ export const app = async () => {
   search.addEventListener('input', () => {
     const value = search.value.toLowerCase();
 
-    const filterUsers = currentStateUsers.filter((data) => {
+    const filterUsers = sortedUsersList.filter((data) => {
       const user = data.username.toLowerCase();
       const email = data.email.toLowerCase();
 
@@ -50,9 +52,9 @@ export const app = async () => {
       clearBtn.classList.add('hide');
     }
 
-    pagesState.all = Math.ceil(filterUsers.length / USER_PER_PAGE);
+    pagesState.all = Math.ceil(filterUsers.length / USER_PER_PAGE) || 1;
 
-    if (pagesState.current > pagesState.all) {
+    if (pagesState.current > pagesState.all && pagesState.all > 0) {
       pagesState.current = pagesState.all;
     }
 
@@ -72,8 +74,10 @@ export const app = async () => {
     search.value = '';
     sortingTypes.date = '';
     sortingTypes.rank = '';
+    sortedUsersList = [...users];
     currentStateUsers = [...users];
 
+    pagesState.current = 1;
     pagesState.all = Math.ceil(users.length / USER_PER_PAGE);
 
     changeTable(users, pagesState);
@@ -144,17 +148,34 @@ export const app = async () => {
   // удаление пользователя
   table.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-user-btn')) {
-      users.forEach((user) => {
-        if (user.id === event.target.dataset.id) {
-          users.splice(users.indexOf(user), 1);
-          currentStateUsers = [...users];
-          pagesState.all = Math.ceil(currentStateUsers.length / USER_PER_PAGE);
+      const modal = modalWindowDraw();
 
-          if (pagesState.current > pagesState.all) {
-            pagesState.current = pagesState.all;
-          }
+      root.appendChild(modal);
 
-          changeTable(currentStateUsers, pagesState);
+      modal.addEventListener('click', (e) => {
+        const modalTarget = e.target;
+
+        if (modalTarget.classList.contains('cancel-button')) {
+          root.removeChild(modal);
+        } else if (modalTarget.classList.contains('confirmation-button')) {
+          root.removeChild(modal);
+
+          users.forEach((user) => {
+            if (user.id === event.target.dataset.id) {
+              users.splice(users.indexOf(user), 1);
+              sortedUsersList.splice(sortedUsersList.indexOf(user), 1);
+              currentStateUsers.splice(currentStateUsers.indexOf(user), 1);
+
+              const numPages = currentStateUsers.length / USER_PER_PAGE;
+              pagesState.all = Math.ceil(numPages) || 1;
+
+              if (pagesState.current > pagesState.all && pagesState.all > 0) {
+                pagesState.current = pagesState.all;
+              }
+
+              changeTable(currentStateUsers, pagesState);
+            }
+          });
         }
       });
     }

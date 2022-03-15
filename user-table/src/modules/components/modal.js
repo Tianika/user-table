@@ -10,7 +10,7 @@ const modalWindowDraw = () => {
   question.innerText = 'Вы уверены, что хотите удалить пользователя?';
 
   const buttonsContainer = document.createElement('div');
-  buttonsContainer.classList.add('buttons-container');
+  buttonsContainer.classList.add('modal-buttons-container');
 
   const confirmationButton = document.createElement('button');
   confirmationButton.classList.add('confirmation-button');
@@ -18,7 +18,7 @@ const modalWindowDraw = () => {
 
   const cancelButton = document.createElement('button');
   cancelButton.classList.add('cancel-button');
-  confirmationButton.innerText = 'Нет';
+  cancelButton.innerText = 'Нет';
 
   buttonsContainer.appendChild(confirmationButton);
   buttonsContainer.appendChild(cancelButton);
