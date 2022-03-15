@@ -109,16 +109,14 @@ export const addPagination = (users) => {
 export const createTable = (users) => {
   const table = document.querySelector('.table');
 
-  const max = users.length < USER_PER_PAGE ? users.length : USER_PER_PAGE;
-
-  for (let i = 0; i < max; i += 1) {
+  users.forEach((user) => {
     const tableRow = document.createElement('tr');
     tableRow.classList.add('user-data');
 
-    createUser(users[i], tableRow);
+    createUser(user, tableRow);
 
     table.appendChild(tableRow);
-  }
+  });
 };
 
 export const clearTable = () => {
@@ -151,4 +149,16 @@ export const checkCurrentPage = (current, all) => {
 
   currentPage.innerText = current;
   countPages.innerText = all;
+};
+
+export const changeTable = (users, pagesState) => {
+  const { length } = users.length;
+  const current = (pagesState.current - 1) * USER_PER_PAGE;
+  const max = length < USER_PER_PAGE ? length : USER_PER_PAGE;
+
+  const currentUsers = users.slice(current, current + max);
+
+  clearTable();
+  createTable(currentUsers);
+  checkCurrentPage(pagesState.current, pagesState.all);
 };

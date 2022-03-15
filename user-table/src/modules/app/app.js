@@ -1,9 +1,4 @@
-import {
-  addPagination,
-  checkCurrentPage,
-  clearTable,
-  createTable,
-} from '../components/userTable';
+import { addPagination, changeTable } from '../components/userTable';
 import { userTableDraw, getUsers } from '../components/userTableComponent';
 import { USER_PER_PAGE } from '../utils/constants';
 
@@ -22,13 +17,12 @@ export const app = async () => {
     all: Math.ceil(users.length / USER_PER_PAGE),
   };
 
-  createTable(users.slice(pagesState.current - 1, USER_PER_PAGE));
+  let currentStateUsers = [...users];
 
-  // добавляем пагинацию
   const pagination = addPagination(users);
   root.querySelector('.wrapper').appendChild(pagination);
 
-  checkCurrentPage(pagesState.current, pagesState.all);
+  changeTable(users, pagesState);
 
   const search = document.querySelector('.search-input');
   const clearBtn = document.querySelector('.clear-button');
@@ -41,12 +35,14 @@ export const app = async () => {
   search.addEventListener('input', () => {
     const value = search.value.toLowerCase();
 
-    const filterUsers = users.filter((data) => {
+    const filterUsers = currentStateUsers.filter((data) => {
       const user = data.username.toLowerCase();
       const email = data.email.toLowerCase();
 
       return user.indexOf(value) !== -1 || email.indexOf(value) !== -1;
     });
+
+    currentStateUsers = [...filterUsers];
 
     if (value.length > 0) {
       clearBtn.classList.remove('hide');
@@ -54,8 +50,13 @@ export const app = async () => {
       clearBtn.classList.add('hide');
     }
 
-    clearTable();
-    createTable(filterUsers);
+    pagesState.all = Math.ceil(filterUsers.length / USER_PER_PAGE);
+
+    if (pagesState.current > pagesState.all) {
+      pagesState.current = pagesState.all;
+    }
+
+    changeTable(filterUsers, pagesState);
   });
 
   const sortingTypes = {
@@ -71,9 +72,11 @@ export const app = async () => {
     search.value = '';
     sortingTypes.date = '';
     sortingTypes.rank = '';
+    currentStateUsers = [...users];
 
-    clearTable();
-    createTable(users);
+    pagesState.all = Math.ceil(users.length / USER_PER_PAGE);
+
+    changeTable(users, pagesState);
   });
 
   // сортировка по дате
@@ -84,15 +87,18 @@ export const app = async () => {
 
     sortingTypes.date = sortingTypes.date === 'desc' ? 'asc' : 'desc';
 
-    const sortUsersByDate = [...users].sort((user1, user2) => {
+    const sortUsersByDate = [...currentStateUsers].sort((user1, user2) => {
       const date1 = new Date(user1.registration_date);
       const date2 = new Date(user2.registration_date);
 
       return sortingTypes.date === 'desc' ? date2 - date1 : date1 - date2;
     });
 
-    clearTable();
-    createTable(sortUsersByDate);
+    currentStateUsers = [...sortUsersByDate];
+
+    pagesState.all = Math.ceil(sortUsersByDate.length / USER_PER_PAGE);
+
+    changeTable(sortUsersByDate, pagesState);
   });
 
   // сортировка по рейтингу
@@ -103,15 +109,18 @@ export const app = async () => {
 
     sortingTypes.rank = sortingTypes.rank === 'desc' ? 'asc' : 'desc';
 
-    const sortUsersByRank = [...users].sort((user1, user2) => {
+    const sortUsersByRank = [...currentStateUsers].sort((user1, user2) => {
       const rank1 = user1.rating;
       const rank2 = user2.rating;
 
       return sortingTypes.rank === 'desc' ? rank2 - rank1 : rank1 - rank2;
     });
 
-    clearTable();
-    createTable(sortUsersByRank);
+    currentStateUsers = [...sortUsersByRank];
+
+    pagesState.all = Math.ceil(sortUsersByRank.length / USER_PER_PAGE);
+
+    changeTable(sortUsersByRank, pagesState);
   });
 
   // пагинация влево
@@ -119,7 +128,7 @@ export const app = async () => {
     if (pagesState.current > 1) {
       pagesState.current -= 1;
 
-      checkCurrentPage(pagesState.current, pagesState.all);
+      changeTable(currentStateUsers, pagesState);
     }
   });
 
@@ -128,7 +137,7 @@ export const app = async () => {
     if (pagesState.current < pagesState.all) {
       pagesState.current += 1;
 
-      checkCurrentPage(pagesState.current, pagesState.all);
+      changeTable(currentStateUsers, pagesState);
     }
   });
 };
