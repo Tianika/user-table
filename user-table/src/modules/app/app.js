@@ -140,6 +140,25 @@ export const app = async () => {
       changeTable(currentStateUsers, pagesState);
     }
   });
+
+  // удаление пользователя
+  table.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-user-btn')) {
+      users.forEach((user) => {
+        if (user.id === event.target.dataset.id) {
+          users.splice(users.indexOf(user), 1);
+          currentStateUsers = [...users];
+          pagesState.all = Math.ceil(currentStateUsers.length / USER_PER_PAGE);
+
+          if (pagesState.current > pagesState.all) {
+            pagesState.current = pagesState.all;
+          }
+
+          changeTable(currentStateUsers, pagesState);
+        }
+      });
+    }
+  });
 };
 
 export default app;
