@@ -21,6 +21,10 @@ export const app = async () => {
   let sortedUsersList = [...users];
   let currentStateUsers = [...users];
 
+  const sortingTypes = {
+    date: '',
+    rank: '',
+  };
   const pagination = addPagination(users);
   root.querySelector('.wrapper').appendChild(pagination);
 
@@ -48,7 +52,7 @@ export const app = async () => {
 
     if (value.length > 0) {
       clearBtn.classList.remove('hide');
-    } else {
+    } else if (!sortingTypes.date && !sortingTypes.rank) {
       clearBtn.classList.add('hide');
     }
 
@@ -60,11 +64,6 @@ export const app = async () => {
 
     changeTable(filterUsers, pagesState);
   });
-
-  const sortingTypes = {
-    date: '',
-    rank: '',
-  };
 
   // кнопка очистить
   clearBtn.addEventListener('click', () => {
@@ -100,7 +99,7 @@ export const app = async () => {
 
     currentStateUsers = [...sortUsersByDate];
 
-    pagesState.all = Math.ceil(sortUsersByDate.length / USER_PER_PAGE);
+    pagesState.all = Math.ceil(sortUsersByDate.length / USER_PER_PAGE) || 1;
 
     changeTable(sortUsersByDate, pagesState);
   });
@@ -122,7 +121,7 @@ export const app = async () => {
 
     currentStateUsers = [...sortUsersByRank];
 
-    pagesState.all = Math.ceil(sortUsersByRank.length / USER_PER_PAGE);
+    pagesState.all = Math.ceil(sortUsersByRank.length / USER_PER_PAGE) || 1;
 
     changeTable(sortUsersByRank, pagesState);
   });
